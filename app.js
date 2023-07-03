@@ -6,6 +6,64 @@ function concatenateArrayToItself(arr) {
     return arr;
   }
 
+function createBoard() {
+    for (let i = 0; i< cardArray.length; i++){
+        const card = document.createElement('img');
+        card.setAttribute('src', 'images/blank.png');
+        card.setAttribute('data-id', i);
+        card.addEventListener('click', flipCard)
+        gridDisplay.append(card)
+
+    }
+}
+
+function checkMatch(){
+    const cards = document.querySelectorAll('#grid img')
+    const optionOneId = cardsChosenIDs[0]
+    const optionTwoId = cardsChosenIDs[1]
+
+    console.log("check for match")
+
+    if (optionOneId == optionTwoId){
+        alert("you clicked the same card :C")
+    }
+
+    if (cardsChosen[0] == cardsChosen[1]){
+        alert('You found a match!')
+        cards[optionOneId].setAttribute('src', 'images/white.png')
+        cards[optionTwoId].setAttribute('src', 'images/white.png')
+        cards[optionOneId].removeEventListener('click', flipCard)
+        cards[optionTwoId].removeEventListener('click', flipCard)
+        cardsWon.push(cardsChosen)
+    }
+
+    resultDisplay.innerHTML = cardsWon.length
+    cardsChosen = []
+    cardsChosenIDs = []
+
+    const images = document.querySelectorAll('#grid img:not([src="images/blank.png"]):not([src="images/white.png"])');
+
+    images.forEach(image => {
+      image.setAttribute('src', 'images/blank.png')
+    });
+
+    if (cardsWon.length == cardArray.length/2){
+        resultDisplay.innerHTML = "You have won!"
+    }
+}
+
+function flipCard(){
+    const cardID = this.getAttribute('data-id')
+    cardsChosen.push(cardArray[cardID].name)
+    cardsChosenIDs.push(cardID)
+
+    this.setAttribute('src', cardArray[cardID].img)
+    if (cardsChosen.length === 2){
+        setTimeout(checkMatch, 500)
+    }
+
+}
+
 const cardArray = [
     {
         name: 'apple_green',
@@ -36,22 +94,10 @@ concatenateArrayToItself(cardArray);
 
 cardArray.sort(() => 0.5 - Math.random())
 
-console.log(cardArray);
-
 const gridDisplay = document.querySelector('#grid')
-
-console.log(gridDisplay)
-
-function createBoard() {
-    for (let i = 0; i< cardArray.length; i++){
-        const card = document.createElement('img');
-        card.setAttribute('src', 'images/blank.png');
-        card.setAttribute('data-id', i);
-        gridDisplay.append(card)
-        console.log(card);
-    }
-}
+const resultDisplay = document.querySelector('#result')
+let cardsChosen = []
+let cardsChosenIDs = []
+const cardsWon = []
 
 createBoard();
-
-
