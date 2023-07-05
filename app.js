@@ -28,7 +28,7 @@ function checkMatch(){
         alert("you clicked the same card :C")
     }
 
-    if (cardsChosen[0] == cardsChosen[1]){
+    else if (cardsChosen[0] == cardsChosen[1]){
         alert('You found a match!')
         cards[optionOneId].setAttribute('src', 'images/white.png')
         cards[optionTwoId].setAttribute('src', 'images/white.png')
@@ -53,15 +53,16 @@ function checkMatch(){
 }
 
 function flipCard(){
-    const cardID = this.getAttribute('data-id')
-    cardsChosen.push(cardArray[cardID].name)
-    cardsChosenIDs.push(cardID)
+    if (cardsChosen.length < 2){
+        const cardID = this.getAttribute('data-id')
+        cardsChosen.push(cardArray[cardID].name)
+        cardsChosenIDs.push(cardID)
 
-    this.setAttribute('src', cardArray[cardID].img)
-    if (cardsChosen.length === 2){
-        setTimeout(checkMatch, 500)
+        this.setAttribute('src', cardArray[cardID].img)
+        if (cardsChosen.length === 2){
+            setTimeout(checkMatch, 500)
+        }
     }
-
 }
 
 const cardArray = [
